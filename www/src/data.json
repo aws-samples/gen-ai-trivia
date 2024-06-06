@@ -1,0 +1,51 @@
+{
+    "bedrockFunctionName": "bedrock-generate-questions-streaming",
+    "region": "us-east-1",
+    "highscores": {
+        "table": "highScoreSorted"
+    },
+    "topics": [
+        "Food",
+        "Hollywood Movies",
+        "Cars",
+        "Animals",
+        "Amazon Web Services",
+        "Music",
+        "Technology",
+        "Geography",
+        "History"
+    ],
+    "rounds": [
+        {
+            "messages": [
+                "Let's go with some easy quesions to get started... ",
+                "Before we start, let's review the rules: ",
+                "1) You have sixty seconds to answer as many questions as you can ",
+                "2) The faster you answer, the more points you'll get ",
+                "3) You must earn at least 1000 points per round to move on to the next round. ",
+                "Use the arrow keys or your mouse to select the correct answer.  ",
+                "Good luck!!"
+            ],
+            "numberOfQuestions": 20,
+            "difficulty": "easy"
+        },
+        {
+            "messages": [
+                "Nicely done!!",
+                "But, that was just a warm up round.",
+                "Let me create some medium difficulty questions for the next round."
+            ],
+            "numberOfQuestions": 25,
+            "difficulty": "medium difficulty"
+        },
+        {
+            "messages": [
+                "You're smarter than I thought!",
+                "Lets see how you do in the final round.",
+                "I'm going to create some really difficult questions.."
+            ],
+            "numberOfQuestions": 15,
+            "difficulty": "very difficult"
+        }
+    ]
+}

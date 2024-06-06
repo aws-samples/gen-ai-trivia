@@ -1,0 +1,29 @@
+# Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
+# SPDX-License-Identifier: MIT-0
+
+# List of tags to be added to the CloudFormation Stacks
+tags:
+  aws-solution: gen-ai-trivia
+
+# AWS Account Information 
+deployInfrastructure:
+  cloudformation:
+    stackName: gen-ai-trivia-pipeline
+
+  codepipeline:
+    pipelineName: gen-ai-trivia
+
+  codecommit:
+    repositoryName: gen-ai-trivia
+    repositoryBranch: main
+    ignoreFilesDirectoriesCodeCommit: # Ignore specific files and directories during CodeCommit creation
+      - .python-version # This file caused the cdk synth to fail in the pipeline
+
+appInfrastructure:
+  productName: gen-ai-trivia
+  
+  cloudformation:
+    stackName: gen-ai-trivia-application
+  
+  dynamoDb:
+    tableName: highScoreSorted
