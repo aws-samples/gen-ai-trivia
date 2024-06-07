@@ -1,7 +1,6 @@
 # Gen AI Trivia
 
 ## Description
-
 Gen AI Trivia is an interactive trivia application that generates questions and answers using artificial intelligence. It provides an engaging and educational experience for users to test their knowledge across various topics. Gen AI Trivia utilizes advanced natural language processing and machine learning techniques to generate unique and challenging trivia questions. The application consists of a backend API that handles question generation and a user-friendly frontend interface for users to interact with the trivia game.
 
 ## Architecture
@@ -14,14 +13,14 @@ The project's folder structure is organized as follows:
 
 | Folder/File   | Description                                           |
 |---------------|-------------------------------------------------------|
-| `app/`        | Contains the application's infrastructure code, that will be build and transformed within the CI/CD Pipeline.     |
-| `configs/`        | Contains the application's deployment configurations. |
-| `images/`        | Contains the images used within the README file. |
-| `pipeline/`        | Contains the application's infrastructure code for the CI/CD Pipeline. |
-| `res/electron/`        | Contains the application's electron settings file. |
-| `scripts/`        | Contains the scripts used to update configurations for the application.          |
-| `www/`        | Contains the frontend code and related files.          |
-| `requirements.txt` | Pip requirements file for deployment environment. |
+| `app/`        | Contains the application's infrastructure code that will be built and transformed within the CI/CD pipeline. |
+| `configs/`    | Contains the application's deployment configurations. |
+| `images/`     | Contains the images used within the README file.      |
+| `pipeline/`   | Contains the application's infrastructure code for the CI/CD pipeline. |
+| `res/electron/` | Contains the application's Electron settings file.  |
+| `scripts/`    | Contains the scripts used to update configurations for the application. |
+| `www/`        | Contains the frontend code and related files.         |
+| `requirements.txt` | Pip requirements file for the deployment environment. |
 | `README.md`   | The main README file for the project.                  |
 | `CONTRIBUTING.md` | Guidelines for contributing to the project.         |
 | `FAQ.md`      | Frequently asked questions and their answers.          |
@@ -43,7 +42,41 @@ Before installing and running Gen AI Trivia, ensure that you have the following 
 
 - [AWS CLI installed](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html) and [configured](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-quickstart.html)
 
-## Deployment Steps / Setup
+## Installation and Setup
+
+### Get access to Amazon Bedrock Claude 3 Sonnet Model
+
+The Gen AI Trivia solution uses the Amazon Bedrock Claude 3 Sonnet model as the method to generate the topic questions.
+
+1. Navigate to the Amazon Bedrock Service. 
+
+   ![alt text](images/bedrock/bedrock_setup_1.png)
+
+2. Click on "Get started".
+
+   ![alt text](images/bedrock/bedrock_setup_2.png)
+
+3. If this is your first time using Amazon Bedrock, you will recieve a welcome message. From there you will click on "Manage model access".
+
+   ![alt text](images/bedrock/bedrock_setup_3.png)
+
+4. Once in the Model access page click on "Enable specific models".
+
+   ![alt text](images/bedrock/bedrock_setup_4.png)
+
+5. Scroll down to the "Anthropic" section and click on the box next to  "Claude 3 Sonnet" model. Scroll down to the bottom of the page and click "Next". 
+
+   ![alt text](images/bedrock/bedrock_setup_5.png)
+
+6. Review that you've selected the correct model and click "Submit".
+
+   ![alt text](images/bedrock/bedrock_setup_6.png)
+
+7. Once the model access request has been submitted, it should be approved. To verify it was approved, navigate back to the "Model access" page and ensure you see an "Access granted" text next to the requested model.
+
+   ![alt text](images/bedrock/bedrock_setup_7.png)
+
+### Deploy CI/CD Pipeline
 
 The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI Trivia application. To install and set up the Gen AI Trivia Pipeline, follow these steps:
 
@@ -75,27 +108,27 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
    cdk deploy gen-ai-trivia-pipeline --require-approval never
    ```
 
-   After the code has run successfully the CI/CD Pipeline should automatically start. It will use an AWS CodeCommit Repository that the solution creates. Once the pipeline completes, continue to the next step. The pipeline will create 3 AWS CloudFormation Stacks (_gen-ai-trivia-pipeline_, _gen-ai-trivia-application_ and _gen-ai-trivia-s3-artifact-deployment_)
+   After the code has run successfully, the CI/CD pipeline should automatically start. It will use an AWS CodeCommit repository that the solution creates. Once the pipeline completes, continue to the next step. The pipeline will create 3 AWS CloudFormation stacks (_gen-ai-trivia-pipeline_, _gen-ai-trivia-application_, and _gen-ai-trivia-s3-artifact-deployment_).
 
    ![alt text](images/cloudformation_stacks.png)
 
 6. Add users to the Amazon Cognito User Pool.
 
-   a. Navigate to the Amazon Cogito Service. 
+   a. Navigate to the Amazon Cognito service.
 
-   ![alt text](images/user_setup/user_setup_1.png)
+   ![alt text](images/userpool/user_setup_1.png)
 
-   b. Ensure you're in the "User pools" section and select the generated User pool.
+   b. Ensure you're in the "User pools" section and select the generated user pool.
 
-   ![alt text](images/user_setup/user_setup_2.png)
+   ![alt text](images/userpool/user_setup_2.png)
 
    c. Ensure you're in the "Users" section and click on "Create user".
 
-   ![alt text](images/user_setup/user_setup_3.png)
+   ![alt text](images/userpool/user_setup_3.png)
 
    d. Select "Send an email invitation", enter in the desired "User name", entre in an email address you have access too, select "Mark email address as verified", and select "Generate a password". Doing the following will generate an email with a password for the first time you login.  
 
-   ![alt text](images/user_setup/user_setup_4.png)
+   ![alt text](images/userpool/user_setup_4.png)
 
 
 7. Once the deployment is complete, access the application using the provided URL. The URL can be found in the "Output" tab of the AWS CloudFormation stack "_gen-ai-trivia-application_". 
@@ -110,12 +143,22 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
 
 8. Navigate and login to the URL from step 7. Use the email with the generated password from step 5 to login to the URL. Once you logged in, you will be promoted to change the password.
 
-   ![alt text](images/user_setup/user_login.png)   ![alt text](images/user_setup/pass_change.png)
+   ![alt text](images/userpool/user_login.png)   ![alt text](images/userpool/pass_change.png)
 
 9. Work hard. Have fun. Make history.
 
-   ![alt text](images/frontend.png)
+   ![alt text](images/frontend_1.png)
 
+## Uninstall Solution
+
+1. To remove the AWS CloudFormation Stacks allow the AWS Resources they create, run the following commands.
+
+   ```bash
+   cdk destroy gen-ai-trivia-s3-artifact-deployment --force
+   aws cloudformation delete-stack --stack-name gen-ai-trivia-application
+   aws cloudformation wait stack-delete-complete --stack-name gen-ai-trivia-application
+   cdk destroy gen-ai-trivia-pipeline --force
+   ```
 
 ## Contributing
 

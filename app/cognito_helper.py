@@ -3,14 +3,13 @@
 
 from constructs import Construct
 from aws_cdk import (
-    CfnOutput,
     RemovalPolicy,
     Stack,
     Duration,
     aws_iam as iam,
     aws_cognito as cognito,
     aws_cognito_identitypool_alpha as cognitoip,
-    aws_ssm as ssm,
+    aws_ssm as ssm
 )
 from cdk_nag import NagSuppressions
 
@@ -84,7 +83,7 @@ class CognitoUserPool(Construct):
         )
 
         # Cognito Identity Pool
-        identity_pool = cognitoip.IdentityPool(
+        self.identity_pool = cognitoip.IdentityPool(
             self,
             "rGenAiTriviaCognitoIdentityPool",
             identity_pool_name="GenAI-Trivia",
@@ -99,7 +98,7 @@ class CognitoUserPool(Construct):
             )
         )
 
-        identity_pool.authenticated_role.add_to_principal_policy(
+        self.identity_pool.authenticated_role.add_to_principal_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 actions=[
@@ -118,7 +117,7 @@ class CognitoUserPool(Construct):
             )
         )
 
-        identity_pool.authenticated_role.add_to_principal_policy(
+        self.identity_pool.authenticated_role.add_to_principal_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 actions=[
@@ -131,7 +130,7 @@ class CognitoUserPool(Construct):
             )
         )
 
-        identity_pool.authenticated_role.add_to_principal_policy(
+        self.identity_pool.authenticated_role.add_to_principal_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 actions=["cognito-identity:GetCredentialsForIdentity"],
@@ -140,7 +139,7 @@ class CognitoUserPool(Construct):
         )
 
         NagSuppressions.add_resource_suppressions(
-            identity_pool,
+            self.identity_pool,
             [
                 {
                     "id": "AwsSolutions-IAM5",
@@ -167,12 +166,14 @@ class CognitoUserPool(Construct):
             self,
             "rGenAiTriviaCognitoIdentityPoolId",
             parameter_name="/genAiTrivia/cognito/identityPoolId",
-            string_value=identity_pool.identity_pool_id,
+            string_value=self.identity_pool.identity_pool_id,
         )
 
-        # Output the CloudFront distribution domain name
-        CfnOutput(
-            self,
-            "rGenAiTriviaCognitoPoolIdOutput", 
-            value=identity_pool.identity_pool_id
-        )
+    def get_identity_pool_id(self):
+        """
+        Get the Cognito identity pool ID.
+
+        Returns:
+            str: The Cognito identity pool ID.
+        """
+        return self.identity_pool.identity_pool_id

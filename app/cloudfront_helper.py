@@ -7,7 +7,6 @@ from aws_cdk import (
     aws_cloudfront_origins as origins,
     Stack,
     RemovalPolicy,
-    CfnOutput,
     aws_s3 as s3,
     aws_iam as iam,
     aws_ssm as ssm
@@ -29,7 +28,7 @@ class CreateCloudFrontFrontEnd(Construct):
         user_pool (cognito.UserPool): The Cognito user pool for user authentication.
         user_pool_client (cognito.UserPoolClient): The Cognito user pool client.
     """
-    
+
     def __init__(self, scope: Construct, id: str, **kwargs):
         """
         Initialize the CreateCloudFrontFrontEnd construct.
@@ -50,7 +49,8 @@ class CreateCloudFrontFrontEnd(Construct):
         region = stack.region
         account = stack.account
 
-        self.bucket = s3.Bucket(
+        # Create an S3 bucket for hosting the frontend and CloudFront Logs
+        self.app_bucket = s3.Bucket(
             self,
             "rGenAiTriviaFrontendS3Bucket",
             removal_policy=RemovalPolicy.DESTROY,
@@ -60,7 +60,27 @@ class CreateCloudFrontFrontEnd(Construct):
         )
 
         NagSuppressions.add_resource_suppressions(
-            self.bucket,
+            self.app_bucket,
+            [
+                {
+                    "id": "AwsSolutions-S1",
+                    "reason": "The S3 Bucket has server access logs disabled.",
+                }
+            ]
+        )
+
+        self.log_bucket = s3.Bucket(
+            self,
+            "rGenAiTriviaFrontendLogS3Bucket",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+            bucket_name=f"gen-ai-trivia-frontend-logs-{region}-{account}",
+            access_control=s3.BucketAccessControl.LOG_DELIVERY_WRITE,
+            enforce_ssl=True
+        )
+
+        NagSuppressions.add_resource_suppressions(
+            self.log_bucket,
             [
                 {
                     "id": "AwsSolutions-S1",
@@ -73,12 +93,12 @@ class CreateCloudFrontFrontEnd(Construct):
         self.oai = cloudfront.OriginAccessIdentity(self, "rGenAiTriviaOai")
 
         # Grant the OAI access to the S3 bucket
-        self.bucket.add_to_resource_policy(
+        self.app_bucket.add_to_resource_policy(
             iam.PolicyStatement(
                 effect=iam.Effect.ALLOW,
                 principals=[self.oai.grant_principal],
                 actions=["s3:GetObject"],
-                resources=[f"arn:aws:s3:::{self.bucket.bucket_name}/*"]
+                resources=[f"arn:aws:s3:::{self.app_bucket.bucket_name}/*"]
             )
         )
 
@@ -88,7 +108,7 @@ class CreateCloudFrontFrontEnd(Construct):
             "rGenAiTriviaCloudFrontDistribution",
             default_root_object="index.html",
             default_behavior=cloudfront.BehaviorOptions(
-                origin=origins.S3Origin(self.bucket, origin_access_identity=self.oai),
+                origin=origins.S3Origin(self.app_bucket, origin_access_identity=self.oai),
             ),
             enabled=True,
             error_responses=[
@@ -99,6 +119,7 @@ class CreateCloudFrontFrontEnd(Construct):
                 )
             ],
             enable_logging=True,
+            log_bucket=self.log_bucket,
             log_file_prefix="gen-ai-trivia-frontend-cloudfront-logs"
         )
 
@@ -133,7 +154,7 @@ class CreateCloudFrontFrontEnd(Construct):
             self,
             "rGenAiTriviaS3BucketName",
             parameter_name="/genAiTrivia/s3/bucketArn",
-            string_value=self.bucket.bucket_arn
+            string_value=self.app_bucket.bucket_arn
         )
         ssm.StringParameter(
             self,
@@ -148,10 +169,11 @@ class CreateCloudFrontFrontEnd(Construct):
             string_value=self.distribution.domain_name
         )
 
-        # Output the CloudFront distribution domain name
-        CfnOutput(
-            self,
-            "rGenAiTriviaCloudFrontDistributionDomainName",
-            value=self.distribution.distribution_domain_name,
-            description="CloudFront Distribution Domain Name",
-        )
+    def get_distribution_domain_name(self):
+        """
+        Get the CloudFront distribution domain name.
+
+        Returns:
+            str: The CloudFront distribution domain name.
+        """
+        return self.distribution.distribution_domain_name

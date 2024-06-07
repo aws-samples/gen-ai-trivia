@@ -6,7 +6,8 @@ from constructs import Construct
 from aws_cdk import (
     Stack,
     Tags,
-    Aspects
+    Aspects,
+    CfnOutput
 )
 from cdk_nag import AwsSolutionsChecks
 from app.dynamodb_helper import create_dynamodb
@@ -46,24 +47,44 @@ class ApplicationStack(Stack):
             Tags: Tags applied to all resources in the stack.
         """
         super().__init__(scope, construct_id, **kwargs)
-
         # DynamoDB Tables
         create_dynamodb(
             scope=self,
             table_name=config["appInfrastructure"]["dynamoDb"]["tableName"]
         )
 
-        CognitoUserPool(
+        # Cognito
+        cognito = CognitoUserPool(
             self,
             "rCreateCognitoUserPool",
             table_name=config["appInfrastructure"]['dynamoDb']['tableName']
         )
 
-        CreateCloudFrontFrontEnd(
+        cog_identity_pool_id = cognito.get_identity_pool_id()
+
+        CfnOutput(
+            self,
+            "oGenAiTriviaCognitoPoolIdOutput", 
+            value=cog_identity_pool_id,
+            description="Cognito Identity Pool ID"
+        )
+
+        # CloudFront
+        cloudfront = CreateCloudFrontFrontEnd(
             self,
             "rCreateCloudFrontFrontEnd"
         )
 
+        cf_distribution_domain_name = cloudfront.get_distribution_domain_name()
+
+        CfnOutput(
+            self,
+            "oGenAiTriviaCloudFrontDistributionDomainName",
+            value=cf_distribution_domain_name,
+            description="CloudFront Distribution Domain Name"
+        )
+
+        # BedRock
         BedrockStreamingFunction(
             self,
             "rBedrockStreamingFunction"

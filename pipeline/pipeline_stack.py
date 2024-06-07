@@ -10,9 +10,11 @@ from aws_cdk import (
     Aspects,
     Environment,
     Tags,
+    RemovalPolicy,
     pipelines,
     aws_codecommit as codecommit,
-    aws_iam as iam
+    aws_iam as iam,
+    aws_s3 as s3
 )
 from cdk_nag import NagSuppressions, AwsSolutionsChecks
 from pipeline.pipeline_helper import create_archive, replace_ssm_in_config
@@ -78,14 +80,38 @@ class PipelineStack(Stack):
 
         # Get current stack name
         stack_name = Aws.STACK_NAME
+        stack = Stack.of(self)
+        region = stack.region
+        account = stack.account
+
+        # Create an S3 bucket CodePipeline Artifacts
+        self.pipeline_bucket = s3.Bucket(
+            self,
+            "rGenAiTriviaPipelineS3Bucket",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+            bucket_name=f"gen-ai-trivia-pipeline-{region}-{account}",
+            enforce_ssl=True
+        )
+
+        NagSuppressions.add_resource_suppressions(
+            self.pipeline_bucket,
+            [
+                {
+                    "id": "AwsSolutions-S1",
+                    "reason": "The S3 Bucket has server access logs disabled.",
+                }
+            ]
+        )
 
         # Create a Pipeline
         source = pipelines.CodePipelineSource.code_commit(repository, "main")
         pipeline_name = config["deployInfrastructure"]["codepipeline"]["pipelineName"]
-        pipeline = pipelines.CodePipeline(
+        deployment_pipeline = pipelines.CodePipeline(
             self,
             "rCodePipeline",
             pipeline_name=pipeline_name,
+            artifact_bucket=self.pipeline_bucket,
             docker_enabled_for_self_mutation=True,
             docker_enabled_for_synth=True,
             enable_key_rotation=True,
@@ -116,7 +142,7 @@ class PipelineStack(Stack):
         )
 
         # Deployment Stage
-        pipeline.add_stage(
+        deployment_pipeline.add_stage(
             PipelineAppStage(
                 self,
                 "Deployment-Infrastructure",
@@ -151,10 +177,15 @@ class PipelineStack(Stack):
             ]
         )
 
-        pipeline.build_pipeline()
+        # Builds CodePipeline to allow for Suppression
+        deployment_pipeline.build_pipeline()
+
+        # Cleanup CodePipeline Artifact Bucket during Cfn Stack Deletion
+        pipeline_bucket = deployment_pipeline.pipeline.artifact_bucket
+        pipeline_bucket.apply_removal_policy(RemovalPolicy.DESTROY)
 
         NagSuppressions.add_resource_suppressions(
-            pipeline,
+            deployment_pipeline,
             [
                 {
                     "id": "AwsSolutions-S1",
@@ -168,6 +199,10 @@ class PipelineStack(Stack):
                 {
                     "id": "AwsSolutions-CB3",
                     "reason": "The CodeBuild project has privileged mode enabled."
+                },
+                {
+                    "id": "AwsSolutions-CB4",
+                    "reason": "The CodeBuild project does not use an AWS KMS key for encryption."
                 }
             ],
             apply_to_children=True
