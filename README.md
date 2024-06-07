@@ -44,7 +44,7 @@ Before installing and running Gen AI Trivia, ensure that you have the following 
 
 ## Installation and Setup
 
-This solution can only be used in regions that have access to the Amazon Bedrock Claude 3 Sonnet model.
+Note: This solution can only be used in AWS Regions that have access to the Amazon Bedrock Claude 3 Sonnet model.
 
 ### Get access to Amazon Bedrock Claude 3 Sonnet Model
 
