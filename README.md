@@ -44,6 +44,8 @@ Before installing and running Gen AI Trivia, ensure that you have the following 
 
 ## Installation and Setup
 
+This solution can only be used in regions that have access to the Amazon Bedrock Claude 3 Sonnet model.
+
 ### Get access to Amazon Bedrock Claude 3 Sonnet Model
 
 The Gen AI Trivia solution uses the Amazon Bedrock Claude 3 Sonnet model as the method to generate the topic questions.
@@ -56,15 +58,15 @@ The Gen AI Trivia solution uses the Amazon Bedrock Claude 3 Sonnet model as the 
 
    ![alt text](images/bedrock/bedrock_setup_2.png)
 
-3. If this is your first time using Amazon Bedrock, you will recieve a welcome message. From there you will click on "Manage model access".
+3. If this is your first time using Amazon Bedrock, you will receive a welcome message. From there, click on "Manage model access".
 
    ![alt text](images/bedrock/bedrock_setup_3.png)
 
-4. Once in the Model access page click on "Enable specific models".
+4. Once on the Model access page, click on "Enable specific models".
 
    ![alt text](images/bedrock/bedrock_setup_4.png)
 
-5. Scroll down to the "Anthropic" section and click on the box next to  "Claude 3 Sonnet" model. Scroll down to the bottom of the page and click "Next". 
+5. Scroll down to the "Anthropic" section and click on the box next to the "Claude 3 Sonnet" model. Scroll down to the bottom of the page and click "Next". 
 
    ![alt text](images/bedrock/bedrock_setup_5.png)
 
@@ -98,9 +100,9 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
    pip install -r requirements.txt
    ```
 
-4. Ensure you have access to AWS Account.
+4. Ensure you have access to an AWS Account.
 
-5. Create initial CDK Bootstrap dependecies, then generate AWS CloudFormation Code and finially deploy the generated code.
+5. Create initial CDK Bootstrap dependencies, then generate AWS CloudFormation Code and finally deploy the generated code.
 
    ```bash
    cdk bootstrap
@@ -126,22 +128,22 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
 
    ![alt text](images/userpool/user_setup_3.png)
 
-   d. Select "Send an email invitation", enter in the desired "User name", entre in an email address you have access too, select "Mark email address as verified", and select "Generate a password". Doing the following will generate an email with a password for the first time you login.  
+   d. Select "Send an email invitation", enter in the desired "User name", enter an email address you have access to, select "Mark email address as verified", and select "Generate a password". Doing the following will generate an email with a password for the first time you log in.  
 
    ![alt text](images/userpool/user_setup_4.png)
 
 
-7. Once the deployment is complete, access the application using the provided URL. The URL can be found in the "Output" tab of the AWS CloudFormation stack "_gen-ai-trivia-application_". 
+7. Once the deployment is complete, access the application using the provided URL. The URL can be found in the "Outputs" tab of the AWS CloudFormation stack "_gen-ai-trivia-application_". 
 
    ![alt text](images/cloudformation_stacks.png)
 
-   Or run the following command to get the URL.
+   Or run the following command to get the URL:
 
    ```bash
    aws cloudformation describe-stacks --stack-name "gen-ai-trivia-application" --query 'Stacks[*].Outputs[?OutputKey==`oTerraformBucket`].OutputValue' --output text
    ```
 
-8. Navigate and login to the URL from step 7. Use the email with the generated password from step 5 to login to the URL. Once you logged in, you will be promoted to change the password.
+8. Navigate to and log in to the URL from step 7. Use the email with the generated password from step 5 to log in. Once you are logged in, you will be prompted to change the password.
 
    ![alt text](images/userpool/user_login.png)   ![alt text](images/userpool/pass_change.png)
 
@@ -151,7 +153,7 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
 
 ## Uninstall Solution
 
-1. To remove the AWS CloudFormation Stacks allow the AWS Resources they create, run the following commands.
+1. To remove the AWS CloudFormation Stacks along with the AWS Resources they create, run the following commands:
 
    ```bash
    cdk destroy gen-ai-trivia-s3-artifact-deployment --force
