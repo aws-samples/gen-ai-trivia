@@ -1,5 +1,7 @@
 # Gen AI Trivia
 
+![alt text](images/frontend_1.png)
+
 ## Description
 Gen AI Trivia is an interactive trivia application that generates questions and answers using artificial intelligence. It provides an engaging and educational experience for users to test their knowledge across various topics. Gen AI Trivia utilizes advanced natural language processing and machine learning techniques to generate unique and challenging trivia questions. The application consists of a backend API that handles question generation and a user-friendly frontend interface for users to interact with the trivia game.
 
