@@ -20,7 +20,6 @@ def get_cognito_param_values() -> list[str]:
     return user_pool_id, user_pool_client_id, identity_pool_id
 
 
-
 def main() -> None:
     """
     Write the Cognito user pool ID, user pool client ID, and
