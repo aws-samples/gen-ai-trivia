@@ -170,7 +170,7 @@ We welcome contributions to improve the Gen AI Trivia project. Please refer to t
 
 ## FAQ
 
-For common issues and their resolutions, please refer to the [FAQ.md](FAQ.md) file.
+For common issues and their resolutions, please refer to the [FAQ.md](FAQ.md) file. 
 
 ## License
 
