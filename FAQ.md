@@ -1,3 +1,13 @@
+# FAQ
+
+### Question
+
+Can I show more than the top 10 scores?
+
+### Answer
+
+Yes, the www/src/data.json configuration file has a dictionary key under "highscores", named "numberOfHighScores" that can be set to any integer value.
+
 # Issues and Resolutions
 
 ## Issue: Deployment Failure

@@ -23,6 +23,7 @@
 <script>
 import data from '../data.json'
 export default {
+    props: ['score'],
     data() {
         return {
             rounds: data.rounds
