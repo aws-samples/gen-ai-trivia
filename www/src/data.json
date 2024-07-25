@@ -2,7 +2,10 @@
     "bedrockFunctionName": "bedrock-generate-questions-streaming",
     "region": "us-east-1",
     "highscores": {
-        "table": "highScoreSorted"
+        "table": "highScoreSorted",
+        "saveAllScores": true,
+        "numberOfHighScores": 10,
+        "scoreIndexName": "sortedScores"
     },
     "topics": [
         "Food",

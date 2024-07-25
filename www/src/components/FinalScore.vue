@@ -1,3 +1,6 @@
+<script setup>
+import TopScoresTable from '../components/TopScoresTable.vue'
+</script>
 <template>
     <div>
         <h1 class="display-5 text-center mt-5">Game Over</h1>
@@ -7,37 +10,20 @@
                 <p>You made it through {{ roundNumber }} rounds with a final score of {{ score }} and accuracy of {{
                     accuracy }}%</p>
             </div>
-            <div v-if="newTopScore" class="card mt-3 w-50 border-success">
-                <div class="card-header bg-success text-white">
-                    <p>Congrats!! Your score is in the top ten highest scores!</p>
+            <div v-if="newHighScore || saveAllScores" class="card mt-3 w-50 border-success">
+                <div v-if="newHighScore" class="card-header bg-success text-white">
+                    <p>Congrats!! Your score is in the top {{ numberOfHighScores }} highest scores!</p>
                 </div>
                 <div class="card-body">
-                    <p>Recored your score for future players to try to beat it!</p>
+                    <p v-if="newHighScore">Recored your score for future players to try to beat it!</p>
+                    <p v-else>You didn't crack the top {{ numberOfHighScores }} but record your score anyway to see
+                        where you stack up amongst
+                        all players!</p>
                     <input type="text" id="highScoreName" v-model="highScoreName" placeholder="Enter your name" />
                     <button class="btn btn-dark ms-2" type="submit" @click="addHighScore">Submit</button>
                 </div>
             </div>
-            <table class="table table-dark w-50 mt-3">
-                <caption class="caption-top">Top 10 Scores</caption>
-                <thead>
-                    <tr>
-                        <th scope="col">Name</th>
-                        <th scope="col">Score</th>
-                        <th scope="col">Accuracy</th>
-                        <th scope="col">Adujsted Score for Accuracy</th>
-                        <th scope="col">Category</th>
-                    </tr>
-                </thead>
-                <tbody class="table-group-divider">
-                    <tr v-for="scoreItem in topTenScores">
-                        <td>{{ scoreItem.name.S }}</td>
-                        <td>{{ scoreItem.initialScore ? scoreItem.initialScore.N : 'null' }}</td>
-                        <td>{{ scoreItem.accuracy ? scoreItem.accuracy.N : 'null' }}%</td>
-                        <td>{{ scoreItem.score.N }}</td>
-                        <td>{{ scoreItem.category.S }}</td>
-                    </tr>
-                </tbody>
-            </table>
+            <TopScoresTable v-if="renderTable" :highScores="highScores"></TopScoresTable>
             <div class="position-absolute start-50">
                 <button class="btn btn-success btn-lg" @click="restart">Play Again?</button>
             </div>
@@ -46,7 +32,7 @@
 </template>
 
 <script>
-import { DynamoDBClient, QueryCommand, PutItemCommand } from "@aws-sdk/client-dynamodb";
+import { DynamoDBClient, PutItemCommand, QueryCommand } from "@aws-sdk/client-dynamodb";
 import { fetchAuthSession } from "aws-amplify/auth";
 import data from '../data.json';
 
@@ -57,47 +43,33 @@ export default {
             region: data.region,
             highScoreName: '',
             tableName: data.highscores.table,
-            topTenScores: [],
-            newTopScore: false,
-            checkedHighScore: false
+            scoreIndexName: data.highscores.scoreIndexName,
+            numberOfHighScores: data.highscores.numberOfHighScores,
+            saveAllScores: data.highscores.saveAllScores,
+            newHighScore: false,
+            checkedHighScore: false,
+            randomUuid: this.generateUuid(),
+            highScores: [],
+            renderTable: true
         }
     },
     mounted() {
         this.dynamoClient = new DynamoDBClient({ region: this.region, credentials: this.getCreds() });
-        this.getTop10Scores(this);
+        this.getHighScores(this);
     },
     methods: {
+        generateUuid() {
+            return 'xxxxxxxxxxxx'.replace(/[x]/g, function (c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r & 0xf | 0x0);
+                return v.toString(16);
+            });
+        },
         showInput() {
-            this.newTopScore = !this.newTopScore;
+            this.newHighScore = !this.newHighScore;
         },
         async getCreds() {
             const session = await fetchAuthSession();
             return session.credentials;
-        },
-        async getTop10Scores(_this) {
-            const topScoresQuery = new QueryCommand({
-                TableName: this.tableName,
-                KeyConditionExpression: "id = :i",
-                ExpressionAttributeValues: { ":i": { "S": "1" } }, // Use same ID and sort on score. If ID needed later, need to create a score index with fake PK
-                ScanIndexForward: false,
-                Limit: 10
-            });
-            const response = await _this.dynamoClient.send(topScoresQuery);
-            _this.topTenScores = response.Items;
-            if (!_this.checkedHighScore) {
-                _this.checkIfNewHighScore();
-                _this.checkedHighScore = true;
-            }
-        },
-        checkIfNewHighScore() {
-            if (this.topTenScores.length >= 10) {
-                const lowestScore = parseInt(this.topTenScores.slice(-1)[0].score.N);
-                if (this.score > lowestScore) {
-                    this.newTopScore = true;
-                }
-            } else {
-                this.newTopScore = true;
-            }
         },
         restart() {
             this.$router.push({ path: '/' });
@@ -122,21 +94,55 @@ export default {
             const reg = /[&<>"'/]/ig;
             return truncatedInput.replace(reg, (match) => (map[match]));
         },
+        async getHighScores() {
+            const highScoresQuery = new QueryCommand({
+                TableName: this.tableName,
+                IndexName: this.scoreIndexName,
+                Limit: this.numberOfHighScores,
+                ScanIndexForward: false,
+                ExpressionAttributeValues: {
+                    ":s": {
+                        N: "1"
+                    }
+                },
+                KeyConditionExpression: "sortID = :s"
+            });
+            const response = await this.dynamoClient.send(highScoresQuery);
+            this.highScores = response.Items;
+            if (!this.checkedHighScore) {
+                this.checkIfNewHighScore();
+                this.checkedHighScore = true;
+            }
+        },
+        checkIfNewHighScore() {
+            if (this.highScores.length < this.numberOfHighScores) {
+                this.newHighScore = true;
+                return;
+            }
+            for (const scoreItem of this.highScores) {
+                if (this.score > parseInt(scoreItem.score.N)) {
+                    this.newHighScore = true;
+                    return;
+                }
+            }
+        },
         async addHighScore() {
             const putItem = new PutItemCommand({
                 TableName: this.tableName,
                 Item: {
-                    "id": { "S": "1" }, // Use same ID and sort on score. If ID needed later, need to create a score index with fake PK
+                    "id": { "S": this.randomUuid.toString() },
                     "name": { "S": this.sanitizeInput(this.highScoreName) },
                     "initialScore": { "N": this.score.toString() },
                     "accuracy": { "N": this.accuracy.toString() },
                     "score": { "N": ((this.accuracy / 100) * this.score).toString() },
-                    "category": { "S": this.topic }
+                    "category": { "S": this.topic },
+                    "sortID": { "N": "1" } // Used for index to query based on score
                 }
             });
             const response = await this.dynamoClient.send(putItem);
-            this.newTopScore = false;
-            this.getTop10Scores(this);
+            this.newHighScore = false;
+            this.saveAllScores = false;
+            this.getHighScores();
         }
 
     }

@@ -3,7 +3,7 @@
         "Cognito": {
             "userPoolId": "",
             "userPoolClientId": "",
-            "identityPoolId": "0"
+            "identityPoolId": ""
         }
     }
 }

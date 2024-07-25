@@ -1,13 +1,12 @@
 # Copyright Amazon.com, Inc. or its affiliates. All Rights Reserved.
 # SPDX-License-Identifier: MIT-0
 
-from aws_cdk import (
-    aws_dynamodb as dynamodb, 
-    RemovalPolicy
-)
+from aws_cdk import aws_dynamodb as dynamodb, RemovalPolicy
 
 
-def create_dynamodb(scope, table_name: str, pit_recovery: bool = True) -> dynamodb.ITable:
+def create_dynamodb(
+    scope, table_name: str, pit_recovery: bool = True
+) -> dynamodb.ITable:
     """
     Create a DynamoDB table.
 
@@ -28,6 +27,14 @@ def create_dynamodb(scope, table_name: str, pit_recovery: bool = True) -> dynamo
         sort_key=dynamodb.Attribute(name="score", type=dynamodb.AttributeType.NUMBER),
         point_in_time_recovery=pit_recovery,
         removal_policy=RemovalPolicy.DESTROY,
+    )
+
+    table.add_global_secondary_index(
+        index_name="sortedScores",
+        partition_key=dynamodb.Attribute(
+            name="sortID", type=dynamodb.AttributeType.NUMBER
+        ),
+        sort_key=dynamodb.Attribute(name="score", type=dynamodb.AttributeType.NUMBER),
     )
 
     return table
