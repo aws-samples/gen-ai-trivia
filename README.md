@@ -112,11 +112,17 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
    cdk deploy gen-ai-trivia-pipeline --require-approval never
    ```
 
-   After the code has run successfully, the CI/CD pipeline should automatically start. It will use an AWS CodeCommit repository that the solution creates. Once the pipeline completes, continue to the next step. The pipeline will create 3 AWS CloudFormation stacks (_gen-ai-trivia-pipeline_, _gen-ai-trivia-application_, and _gen-ai-trivia-s3-artifact-deployment_).
+6. To trigger the run of the AWS CodePipeline, the code must be uploaded to the designated Source S3 Bucket. _Optionally, this step can be automated by leveraging GitHub Actions or equivalent version control and Continuous Integration (CI) technologies._
+
+   ```bash
+   python ./scripts/upload_to_source_bucket.py
+   ```
+
+   The pipeline run will create 3 AWS CloudFormation stacks (_gen-ai-trivia-pipeline_, _gen-ai-trivia-application_, and _gen-ai-trivia-s3-artifact-deployment_). Once the pipeline completes, continue to the next step. 
 
    ![alt text](images/cloudformation_stacks.png)
 
-6. Add users to the Amazon Cognito User Pool.
+7. Add users to the Amazon Cognito User Pool.
 
    a. Navigate to the Amazon Cognito service.
 
@@ -134,8 +140,7 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
 
    ![alt text](images/userpool/user_setup_4.png)
 
-
-7. Once the deployment is complete, access the application using the provided URL. The URL can be found in the "Outputs" tab of the AWS CloudFormation stack "_gen-ai-trivia-application_". 
+8. Once the deployment is complete, access the application using the provided URL. The URL can be found in the "Outputs" tab of the AWS CloudFormation stack "_gen-ai-trivia-application_". 
 
    ![alt text](images/cloudformation_stacks.png)
 
@@ -145,11 +150,11 @@ The Gen AI Trivia code will deploy a CI/CD Pipeline that will deploy the Gen AI 
    aws cloudformation describe-stacks --stack-name "gen-ai-trivia-application" --query 'Stacks[*].Outputs[?OutputKey==`oTerraformBucket`].OutputValue' --output text
    ```
 
-8. Navigate to and log in to the URL from step 7. Use the email with the generated password from step 5 to log in. Once you are logged in, you will be prompted to change the password.
+9. Navigate to and log in to the URL from step 7. Use the email with the generated password from step 5 to log in. Once you are logged in, you will be prompted to change the password.
 
    ![alt text](images/userpool/user_login.png)   ![alt text](images/userpool/pass_change.png)
 
-9. Work hard. Have fun. Make history.
+10. Work hard. Have fun. Make history.
 
    ![alt text](images/frontend_1.png)
 

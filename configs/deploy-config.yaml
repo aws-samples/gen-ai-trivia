@@ -12,11 +12,10 @@ deployInfrastructure:
 
   codepipeline:
     pipelineName: gen-ai-trivia
+    sourceBucketPrefix: gen-ai-trivia-source  # Region and Account number will be appended to the bucket name
 
-  codecommit:
-    repositoryName: gen-ai-trivia
-    repositoryBranch: main
-    ignoreFilesDirectoriesCodeCommit: # Ignore specific files and directories during CodeCommit creation
+  sourceCode:
+    ignoreFilesDirectories: # Ignore specific files and directories during zip creation
       - .python-version # This file caused the cdk synth to fail in the pipeline
 
 appInfrastructure:

@@ -12,72 +12,72 @@ from aws_cdk import (
     Tags,
     RemovalPolicy,
     pipelines,
-    aws_codecommit as codecommit,
     aws_iam as iam,
-    aws_s3 as s3
+    aws_s3 as s3,
+    aws_codepipeline_actions as codepipeline_actions
 )
 from cdk_nag import NagSuppressions, AwsSolutionsChecks
-from pipeline.pipeline_helper import create_archive, replace_ssm_in_config
 from pipeline.pipeline_app_stage import PipelineAppStage
 
 
 class PipelineStack(Stack):
     """
-    A CDK Stack that creates a CodeCommit repository and a CodePipeline pipeline.
+    CDK Stack for the deployment pipeline.
+
+    This stack sets up the CodePipeline for building and deploying the application.
+    It includes the source, build, and deployment stages, along with necessary resources
+    such as S3 buckets and IAM roles.
     """
 
-    def create_repository(self, config: dict):
+    def create_pipeline_source_bucket(self, config: dict):
         """
-        Create a CodeCommit repository from a configuration.
+        Creates an S3 bucket for uploading the source code archive.
 
         Args:
-            config (dict): The configuration dictionary containing the repository details.
-
+            config (dict): The application configuration.
+            
         Returns:
-            codecommit.Repository: The created CodeCommit repository object.
-
-        This method creates a CodeCommit repository based on the provided configuration dictionary.
-        If the configuration specifies a CodeCommit repository, it creates a ZIP archive containing
-        the code and initializes the repository with the contents of the archive.
+            s3.Bucket: The created S3 bucket.
         """
-        if config["deployInfrastructure"].get("codecommit"):
-            # Create a zip file to all CodeCommit to import
-            archive_file = create_archive(config=config)
+        # Get current stack name
+        stack = Stack.of(self)
+        region = stack.region
+        account = stack.account
 
-            repository_name = config["deployInfrastructure"]["codecommit"][
-                "repositoryName"
+        # Create CodePipeline Source Bucket
+        src_bucket_name = f"{config['deployInfrastructure']['codepipeline']['sourceBucketPrefix']}-{region}-{account}"
+        self.source_bucket = s3.Bucket(
+            self,
+            "rGenAiTriviaSourceS3Bucket",
+            removal_policy=RemovalPolicy.DESTROY,
+            auto_delete_objects=True,
+            bucket_name=src_bucket_name,
+            enforce_ssl=True,
+            versioned=True
+        )
+
+        NagSuppressions.add_resource_suppressions(
+            self.source_bucket,
+            [
+                {
+                    "id": "AwsSolutions-S1",
+                    "reason": "The S3 Bucket has server access logs disabled."
+                }
             ]
-            repository = codecommit.Repository(
-                self,
-                "rCodeCommitRepository",
-                repository_name=repository_name,
-                description=f"This is the {repository_name} repository",
-                code=codecommit.Code.from_zip_file(
-                    file_path=archive_file,
-                    branch=config["deployInfrastructure"]["codecommit"][
-                        "repositoryBranch"
-                    ]
-                )
-            )
+        )
 
-            return repository
+        return self.source_bucket
 
-    def create_pipeline(self, repository, config: dict):
+    def create_pipeline(self, config: dict):
         """
-        Create a CodePipeline pipeline.
+        Creates the CodePipeline for building and deploying the application.
 
         Args:
-            repository (codecommit.Repository): The CodeCommit repository to use as the source.
-            config (dict): The configuration dictionary containing the pipeline details.
-
-        Returns:
-            pipelines.CodePipeline: The created CodePipeline object.
-
-        This method creates a CodePipeline pipeline with the provided CodeCommit repository as the source.
-        The pipeline includes a synth step to build the application and a deployment stage to deploy the
-        infrastructure and the web application.
+            config (dict): The application configuration.
+            
+        The pipeline includes the source, build, and deployment stages, along with 
+        necessary resources such as S3 buckets and IAM roles.
         """
-
         # Get current stack name
         stack_name = Aws.STACK_NAME
         stack = Stack.of(self)
@@ -99,13 +99,18 @@ class PipelineStack(Stack):
             [
                 {
                     "id": "AwsSolutions-S1",
-                    "reason": "The S3 Bucket has server access logs disabled.",
+                    "reason": "The S3 Bucket has server access logs disabled."
                 }
             ]
         )
 
         # Create a Pipeline
-        source = pipelines.CodePipelineSource.code_commit(repository, "main")
+        source = pipelines.CodePipelineSource.s3(
+            bucket=self.source_bucket,
+            object_key="source.zip",
+            action_name="Source",
+            trigger=codepipeline_actions.S3Trigger.EVENTS
+        )
         pipeline_name = config["deployInfrastructure"]["codepipeline"]["pipelineName"]
         deployment_pipeline = pipelines.CodePipeline(
             self,
@@ -220,14 +225,11 @@ class PipelineStack(Stack):
         """
         super().__init__(scope, construct_id, **kwargs)
 
-        # Replace SSM Parameters within config file
-        config = replace_ssm_in_config(scope=self, temp_config=config)
-
-        # CodeCommit Setup
-        i_repository = self.create_repository(config=config)
+        # Create Source S3 Bucket
+        self.create_pipeline_source_bucket(config=config)
 
         # CodePipeline Setup
-        self.create_pipeline(repository=i_repository, config=config)
+        self.create_pipeline(config=config)
 
         # Add tags to all resources created
         tags = json.loads(json.dumps(config["tags"]))

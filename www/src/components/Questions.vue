@@ -178,6 +178,7 @@ export default {
         },
         showNextQuestion() {
             if (this.questions[this.currentQuestion] == undefined || !this.questions[this.currentQuestion]) {
+                this.$refs.content.style.display = "none";
                 this.$refs.loadingArea.style.display = "block";
                 const _this = this;
                 setTimeout(function () {
@@ -185,6 +186,9 @@ export default {
                 }, 500, _this);
             } else {
                 this.$refs.loadingArea.style.display = "none";
+                this.$refs.content.style.display = "block";
+                this.betweenQuestions = false;
+                console.log(this.questions[this.currentQuestion]);
                 this.currentQuestionText = this.questions[this.currentQuestion].question;
                 let answers = this.questions[this.currentQuestion].answers.sort(() => Math.random() - 0.5);
                 this.answer1 = answers[0];

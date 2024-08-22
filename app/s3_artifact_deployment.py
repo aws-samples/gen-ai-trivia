@@ -16,6 +16,8 @@ from cdk_nag import NagSuppressions, AwsSolutionsChecks
 class S3ArtifactDeployment(Stack):
     """
     A CDK Stack that deploys an artifact to an S3 bucket and associates it with a CloudFront distribution.
+
+    Deploys the frontend artifact to the S3 bucket created in the main application stack.
     """
 
     def __init__(self, scope: Construct, construct_id: str, **kwargs) -> None:
