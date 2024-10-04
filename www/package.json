@@ -21,6 +21,6 @@
     "@aws-sdk/client-lambda": "3.554.0",
     "@aws-sdk/credential-providers": "3.556.0",
     "@vitejs/plugin-vue": "5.0.4",
-    "vite": "5.2.6"
+    "vite": "5.4.8"
   }
 }
