@@ -1,0 +1,38 @@
+Name: Push_to_S3
+
+on:
+  push:
+    branches:
+      - develop/1.2.1
+
+concurrency:
+  group: ${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  id-token: write
+  contents: read
+  actions: read
+  pages: write
+
+jobs:
+ PushToS3:
+    name: Push to S3
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+  
+      - name: Configure AWS credentials (Dev)
+        env:
+          NO_PROXY: sts.us-east-1.amazonaws.com
+        uses: aws-actions/configure-aws-credentials@v4
+        with:
+          role-to-assume: ${{ secret.ASSUME_ROLE_ARN }}
+          aws-region: us-east-1
+
+      - name: Install dependencies 
+        run: |
+          pip install --upgrade pip
+          pip install --upgrade awscli
+          python ./scripts/upload_to_source_bucket.py
