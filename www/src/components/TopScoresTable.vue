@@ -5,6 +5,7 @@
         </caption>
         <thead>
             <tr>
+                <th scope="col">Rank</th>
                 <th scope="col">Name</th>
                 <th scope="col">Score</th>
                 <th scope="col">Accuracy</th>
@@ -14,7 +15,8 @@
         </thead>
         <tbody class="table-group-divider">
             <!-- <tr v-for="scoreItem in topTenScores"> -->
-            <tr v-for="scoreItem in highScores" :key="scoreItem.id">
+            <tr v-for="(scoreItem, index) in highScores" :key="scoreItem.id">
+                <td>{{ index + 1 }}</td>
                 <td>{{ scoreItem.name.S }}</td>
                 <td>{{ scoreItem.initialScore ? scoreItem.initialScore.N : 'null' }}</td>
                 <td>{{ scoreItem.accuracy ? scoreItem.accuracy.N : 'null' }}%</td>
