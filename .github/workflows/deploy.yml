@@ -22,7 +22,6 @@ jobs:
     steps:
       - name: Checkout
         uses: actions/checkout@v3
-  
       - name: Configure AWS credentials (Dev)
         env:
           NO_PROXY: sts.us-east-1.amazonaws.com
@@ -30,7 +29,6 @@ jobs:
         with:
           role-to-assume: ${{ secrets.ASSUME_ROLE_ARN }}
           aws-region: us-east-1
-
       - name: Install dependencies 
         run: |
           pip install --upgrade pip awscli boto3
