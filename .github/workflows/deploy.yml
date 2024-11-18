@@ -3,7 +3,7 @@ name: Push to S3
 on:
   push:
     branches:
-      - develop/1.2.1
+      - main
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
