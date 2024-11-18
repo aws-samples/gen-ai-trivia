@@ -1,7 +1,6 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Home from '../views/Home.vue'
 import TriviaGame from '../views/TriviaGame.vue'
-import FinalScore from '../components/FinalScore.vue'
 
 
 const routes = [

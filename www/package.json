@@ -10,16 +10,16 @@
   },
   "dependencies": {
     "@aws-amplify/ui-vue": "4.2.6",
-    "@aws-sdk/client-dynamodb": "3.664.0",
-    "aws-amplify": "6.6.3",
+    "@aws-sdk/client-dynamodb": "3.665.0",
+    "aws-amplify": "6.6.4",
     "bootstrap": "5.3.3",
     "vue": "3.4.21",
     "vue-router": "4.3.1"
   },
   "devDependencies": {
-    "@aws-sdk/client-cognito-identity": "3.664.0",
-    "@aws-sdk/client-lambda": "3.664.0",
-    "@aws-sdk/credential-providers": "3.664.0",
+    "@aws-sdk/client-cognito-identity": "3.665.0",
+    "@aws-sdk/client-lambda": "3.665.0",
+    "@aws-sdk/credential-providers": "3.665.0",
     "@vitejs/plugin-vue": "5.0.4",
     "vite": "5.4.8"
   }

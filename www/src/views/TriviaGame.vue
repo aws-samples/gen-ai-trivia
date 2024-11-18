@@ -2,7 +2,10 @@
     <nav class="navbar navbar-dark bg-dark text-center text-white fixed-top">
         <span class="display-7 ms-5">{{ topic }} Round {{ roundNumber }}</span>
         <h1 class="text-center display-4">GenAI Trivia Game</h1>
-        <span class="display-7 me-5" id="score">Score: {{ score }} | Accuracy: {{ accuracyPercent }}%</span>
+        <div>
+            <span class="display-7 me-5" id="score">Score: {{ score }} | Accuracy: {{ accuracyPercent }}%</span>
+            <button class="btn btn-outline-danger me-5" type="button" @click="quitGame">Quit</button>
+        </div>
     </nav>
     <div>
         <component :is="currentComponent" :topic="topic" :roundNumber="roundNumber" :score="score"
@@ -68,6 +71,9 @@ export default {
         },
         setPreviousQuestions(questionsList) {
             this.previousQuestions.push(...questionsList);
+        },
+        quitGame() {
+            this.$router.push({ path: '/' });
         }
     }
 }
