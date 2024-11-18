@@ -54,7 +54,7 @@ class S3ArtifactDeployment(Stack):
             sources=[s3deploy.Source.asset("./www/dist")],
             destination_bucket=i_bucket,
             distribution=i_distribution,
-            distribution_paths=["/"]
+            distribution_paths=["/*"]
         )
 
         NagSuppressions.add_resource_suppressions(
