@@ -1,4 +1,4 @@
-Name: Push_to_S3
+name: Push to S3
 
 on:
   push:
