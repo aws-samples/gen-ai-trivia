@@ -55,6 +55,7 @@ class PipelineStack(Stack):
             enforce_ssl=True,
             versioned=True
         )
+        self.source_bucket_arn = self.source_bucket.bucket_arn
 
         NagSuppressions.add_resource_suppressions(
             self.source_bucket,

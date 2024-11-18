@@ -139,6 +139,10 @@ class CreateCloudFrontFrontEnd(Construct):
                     "reason": "The CloudFront distribution allows for SSLv3 or TLSv1 for HTTPS viewer connections.",
                 },
                 {
+                    "id": "AwsSolutions-CFR7",
+                    "reason": "The CloudFront distribution does not use an origin access control with an S3 origin."
+                },
+                {
                     "id": "AwsSolutions-S1",
                     "reason": "The S3 Bucket has server access logs disabled.",
                 },

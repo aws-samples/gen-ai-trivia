@@ -124,12 +124,12 @@ if __name__ == "__main__":
     # It handles any exceptions and logs appropriate messages.
     S3_CLIENT = boto3.client("s3")
     CP_CLIENT = boto3.client("codepipeline")
-    
+
     try:
         CONFIG_FILE_PATH = "./configs/deploy-config.yaml"
         with open(CONFIG_FILE_PATH, "r", encoding="utf-8") as f:
             deploy_config = yaml.load(f, Loader=yaml.SafeLoader)
-        
+
         SRC_BUCKET_PREFIX = deploy_config['deployInfrastructure']['codepipeline']['sourceBucketPrefix']
         CODEPIPELINE_NAME = deploy_config['deployInfrastructure']['codepipeline']['pipelineName']
 
