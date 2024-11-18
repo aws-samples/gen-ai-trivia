@@ -107,7 +107,7 @@ class PipelineStack(Stack):
         # Create a Pipeline
         source = pipelines.CodePipelineSource.s3(
             bucket=self.source_bucket,
-            object_key="source.zip",
+            object_key="zipped/source.zip",
             action_name="Source",
             trigger=codepipeline_actions.S3Trigger.EVENTS
         )
