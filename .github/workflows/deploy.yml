@@ -33,6 +33,5 @@ jobs:
 
       - name: Install dependencies 
         run: |
-          pip install --upgrade pip
-          pip install --upgrade awscli
+          pip install --upgrade pip awscli boto3
           python ./scripts/upload_to_source_bucket.py
