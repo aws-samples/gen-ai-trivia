@@ -19,7 +19,7 @@ import TopScoresTable from '../components/TopScoresTable.vue'
                     <p v-else>You didn't crack the top {{ numberOfHighScores }} but record your score anyway to see
                         where you stack up amongst
                         all players!</p>
-                    <input type="text" id="highScoreName" v-model="highScoreName" placeholder="Enter your initials (3 characters max)" maxlength="3"/>
+                    <input type="text" id="highScoreName" v-model="highScoreName" placeholder="Enter your initials (3 characters max)" maxlength="3" size="40">
                     <button class="btn btn-dark ms-2" type="submit" @click="addHighScore">Submit</button>
                 </div>
             </div>
