@@ -1,16 +1,16 @@
 <template>
     <table class="table table-dark w-50 mt-3">
         <caption class="caption-top">
-            <h2>Top {{ numberOfHighScores }} Scores</h2>
+            <h2>{{ $t('topScores.top') }} {{ numberOfHighScores }} {{ $t('topScores.scores') }}</h2>
         </caption>
         <thead>
             <tr>
-                <th scope="col">Rank</th>
-                <th scope="col">Name</th>
-                <th scope="col">Score</th>
-                <th scope="col">Accuracy</th>
-                <th scope="col">Adujsted Score for Accuracy</th>
-                <th scope="col">Category</th>
+                <th scope="col">{{ $t('topScores.rank') }}</th>
+                <th scope="col">{{ $t('topScores.name') }}</th>
+                <th scope="col">{{ $t('topScores.score') }}</th>
+                <th scope="col">{{ $t('topScores.accuracy') }}</th>
+                <th scope="col">{{ $t('topScores.adjusted') }}</th>
+                <th scope="col">{{ $t('topScores.category') }}</th>
             </tr>
         </thead>
         <tbody class="table-group-divider">
@@ -29,6 +29,7 @@
 
 <script>
 import data from '../data.json'
+
 export default {
     props: ['highScores'],
     data() {

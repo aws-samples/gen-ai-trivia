@@ -1,15 +1,19 @@
 <script setup>
 import TopicButtons from '../components/TopicButtons.vue'
 import TopScoresTable from '../components/TopScoresTable.vue';
+import LanguageSwitcher from '../components/LanguageSwitcher.vue';
 </script>
 
 <template>
     <nav class="navbar navbar-dark bg-dark text-center text-white fixed-top">
         <div></div>
         <div class="text-center">
-            <h1>GenAI Trivia Game</h1>
+            <h1>{{ $t("home.header") }}</h1>
         </div>
         <div></div>
+        <div class="m-3">
+            <LanguageSwitcher />
+        </div>
     </nav>
     <div class="gap-2 col-10 mx-auto mt-5">
         <img id="robot" src="../assets/happy_robot.jpg" class="float-start" width="40%" />
@@ -24,16 +28,17 @@ import TopScoresTable from '../components/TopScoresTable.vue';
             <TopicButtons v-for="topic in topics" v-bind:topic="topic" />
             </br>
             <div ref="categoryContainer" class="mt-2">
-                <input type="text" ref="customCategory" placeholder="Enter your own topic" class="ms-2">
-                <button @click="submit" id="submit-button" class="btn btn-dark ms-2">Submit</button>
+                <input type="text" ref="customCategory" :placeholder="$t('home.topicPlaceholder')" class="ms-2">
+                <button @click="submit" id="submit-button" class="btn btn-dark ms-2">{{ $t("home.submit") }}</button>
             </div>
         </div>
         <div class="">
             <br />
             <button @click="showScoreTable = !showScoreTable" id="get_top_scores" class="btn btn-dark ms-2"><span
-                    v-if="showScoreTable">Hide</span><span v-else>Show</span> Top {{ data.highscores.numberOfHighScores
+                    v-if="showScoreTable">{{ $t("home.hide") }}</span><span v-else>{{ $t("home.show") }}</span> {{
+                        $t("home.top") }} {{ data.highscores.numberOfHighScores
                 }}
-                Scores</button>
+                {{ $t("home.scores") }}</button>
             <div>
                 <TopScoresTable v-if="showScoreTable" :highScores="highScores"></TopScoresTable>
             </div>
@@ -50,24 +55,24 @@ export default {
     data() {
         return {
             region: data.region,
-            topics: data.topics,
             highScores: [],
-            showScoreTable: false
+            showScoreTable: false,
+            topics: this.$t("home.topics").split(",")
         }
     },
     mounted() {
+        console.log('Topics: ', this.topics)
         this.dynamoClient = new DynamoDBClient({ region: this.region, credentials: this.getCreds() });
         async function sleep(ms) {
             return new Promise(resolve => setTimeout(resolve, ms));
         };
-        async function updateMessage(messageElement) {
-            let message = "Hi! My name is Claude. I am an artificial intelligence that lives in the cloud. Want to test your knowledge against mine? You can select a topic below, or enter your own.. ";
-            for (let i = 0; i < message.length; i++) {
-                messageElement.insertAdjacentHTML('beforeend', message.charAt(i));
+        async function updateMessage(messageElement, messageText) {
+            for (let i = 0; i < messageText.length; i++) {
+                messageElement.insertAdjacentHTML('beforeend', messageText.charAt(i));
                 await sleep(5);
             }
         };
-        updateMessage(this.$refs.transitionMessage);
+        updateMessage(this.$refs.transitionMessage, this.$t("home.greeting"));
         this.fetchTopScores();
     },
     methods: {

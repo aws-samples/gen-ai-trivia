@@ -1,9 +1,9 @@
 {
     "Auth": {
         "Cognito": {
-            "userPoolId": "",
-            "userPoolClientId": "",
-            "identityPoolId": ""
+            "userPoolId": "us-east-1_fhMVtq1rD",
+            "userPoolClientId": "282aq29f3rp5c9247lmuja3jkl",
+            "identityPoolId": "us-east-1:636af7fa-a6d2-4090-8fd6-4da1e7381950"
         }
     }
 }
