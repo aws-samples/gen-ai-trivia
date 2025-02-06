@@ -29,6 +29,14 @@ exports.handler = awslambda.streamifyResponse(
            4. Ensure that the correct answer is one of the answers supplied. 
            5. Skip the preamble in the output.
            6. Ensure that there are no questions and answers that have been asked before by comparing them with the previously asked questions supplied.
+           7. Ensure that the questions and answers are relevant to the topic supplied.
+           8. Ensure that the questions and answers are grammatically correct.
+           9. Ensure that the questions and answers are not offensive or inappropriate.
+           10. Ensure that there are no repeating questions.
+           11. If the topic only allows for a single answer, change the topic slightly to allow for multiple answers.
+           12. Ensure that there are no repeating answers, from pervious questions.
+           13. If the topic is a simple math equalution like 1+1 or 2+2, make the questions and answers extremely hard.
+           14. If the topic is 2 single digit math equations, make the questions and answers extremely hard.
         </RULES>
         <PREVIOUSLY-ASKED-QUESTIONS>
         ${JSON.stringify(event.existing_questions)}

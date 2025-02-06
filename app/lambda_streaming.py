@@ -55,11 +55,15 @@ class BedrockStreamingFunction(Construct):
             [
                 {
                     "id": "AwsSolutions-IAM4",
-                    "reason": "Managed policy for Lambda Execution",
+                    "reason": "Managed policy for Lambda Execution"
                 },
                 {
                     "id": "AwsSolutions-IAM5",
-                    "reason": "Using wildcard to allow multiple models if needed.",
+                    "reason": "Using wildcard to allow multiple models if needed."
+                },
+                {
+                    "id": "AwsSolutions-L1",
+                    "reason": "The non-container Lambda function is not configured to use the latest runtime version."
                 }
             ],
             apply_to_children=True
