@@ -1,5 +1,5 @@
 <template>
-    <button @click="selectCategory(topic)" class="btn btn-outline-secondary ms-2 mb-2">{{ topic }}</button>
+    <button @click="selectCategory(topic)" class="btn btn-outline-secondary ms-2 mb-2">{{ $t(topic) }}</button>
 </template>
 
 <script>

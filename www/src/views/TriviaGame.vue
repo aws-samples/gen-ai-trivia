@@ -1,10 +1,10 @@
 <template>
     <nav class="navbar navbar-dark bg-dark text-center text-white fixed-top">
         <span class="display-7 ms-5">{{ topic }} Round {{ roundNumber }}</span>
-        <h1 class="text-center display-4">GenAI Trivia Game</h1>
+        <h1 class="text-center display-4">{{ $t("home.header") }}</h1>
         <div>
-            <span class="display-7 me-5" id="score">Score: {{ score }} | Accuracy: {{ accuracyPercent }}%</span>
-            <button class="btn btn-outline-danger me-5" type="button" @click="quitGame">Quit</button>
+            <span class="display-7 me-5" id="score">{{ $t("game.score") }}: {{ score }} | {{ $t("game.accuracy") }}: {{ accuracyPercent }}%</span>
+            <button class="btn btn-outline-danger me-5" type="button" @click="quitGame">{{ $t("game.quit") }}</button>
         </div>
     </nav>
     <div>

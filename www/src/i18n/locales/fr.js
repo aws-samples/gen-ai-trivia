@@ -1,0 +1,50 @@
+export default {
+    locale: {
+        en: "Anglais",
+        es: "Espagnol",
+        de: "Allemand",
+        it: "Italien",
+        fr: "Français",
+        pt: "Portugais",
+        ja: "Japonais",
+        zh: "Chinois"
+    },
+    home: {
+        header: "Jeu de Trivia GenAI",
+        greeting: "Bonjour ! Je m'appelle Claude. Je suis une intelligence artificielle qui vit dans le cloud. Voulez-vous tester vos connaissances contre les miennes ? Vous pouvez sélectionner un sujet ci-dessous, ou entrer le vôtre..",
+        topics: "Nourriture,Films d'Hollywood,Voitures,Animaux,Amazon Web Services,Musique,Technologie,Géographie,Histoire",
+        topScores: "Voir les {count} meilleurs scores",
+        submitButton: "Commencer !",
+        "Food": "Nourriture",
+        topicPlaceholder: "Entrez votre propre sujet",
+        topicsHeader: "Sujets",
+        start: "Commencer",
+        loading: "Chargement...",
+        error: "Erreur",
+        errorText: "Désolé, une erreur s'est produite. Veuillez réessayer plus tard.",
+        name: "Nom",
+        namePlaceholder: "Entrez votre nom",
+        nameError: "Veuillez entrer un nom",
+        difficulty: "Difficulté",
+        difficultyError: "Veuillez sélectionner une difficulté",
+        difficultyEasy: "Facile",
+        difficultyMedium: "Moyen",
+        difficultyHard: "Difficile",
+        difficultyExtreme: "Extrême",
+        submit: "Soumettre",
+        show: "Afficher",
+        hide: "Masquer",
+        top: "Meilleurs",
+        scores: "Scores"
+    },
+    topScores: {
+        top: "Meilleurs",
+        scores: "Scores",
+        rank: "Rang",
+        name: "Nom",
+        score: "Score",
+        accuracy: "Précision",
+        adjusted: "Score ajusté pour la précision",
+        category: "Catégorie"
+    }
+}

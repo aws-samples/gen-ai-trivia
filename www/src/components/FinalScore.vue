@@ -3,29 +3,26 @@ import TopScoresTable from '../components/TopScoresTable.vue'
 </script>
 <template>
     <div>
-        <h1 class="display-5 text-center mt-5">Game Over</h1>
+        <h1 class="display-5 text-center mt-5">{{ $t("game.gameOver") }}</h1>
         <div class="gap-2 mt-5">
             <img id="happy-img" src="../assets/happy_robot_smile_right.jpg" class="float-start" width="30%">
             <div ref="message" class="card p-3 w-50 mt-5">
-                <p>You made it through {{ roundNumber }} rounds with a final score of {{ score }} and accuracy of {{
-                    accuracy }}%</p>
+                <p>{{ $t("game.finalMessage", { rounds: roundNumber, score: score, accuracy: accuracy }) }}</p>
             </div>
             <div v-if="newHighScore || saveAllScores" class="card mt-3 w-50 border-success">
                 <div v-if="newHighScore" class="card-header bg-success text-white">
-                    <p>Congrats!! Your score is in the top {{ numberOfHighScores }} highest scores!</p>
+                    <p>{{ $t("game.highScoreCongrats", { count: numberOfHighScores }) }}</p>
                 </div>
                 <div class="card-body">
-                    <p v-if="newHighScore">Recored your score for future players to try to beat it!</p>
-                    <p v-else>You didn't crack the top {{ numberOfHighScores }} but record your score anyway to see
-                        where you stack up amongst
-                        all players!</p>
-                    <input type="text" id="highScoreName" v-model="highScoreName" placeholder="Enter your initials (3 characters max)" maxlength="3" size="40">
-                    <button class="btn btn-dark ms-2" type="submit" @click="addHighScore">Submit</button>
+                    <p v-if="newHighScore">{{ $t("game.recordScore") }}</p>
+                    <p v-else>{{ $t("game.recordScoreAnyway", { count: numberOfHighScores }) }}</p>
+                    <input type="text" id="highScoreName" v-model="highScoreName" :placeholder="$t('game.initials')" maxlength="3" size="40">
+                    <button class="btn btn-dark ms-2" type="submit" @click="addHighScore">{{ $t("game.submit") }}</button>
                 </div>
             </div>
             <TopScoresTable v-if="renderTable" :highScores="highScores"></TopScoresTable>
             <div class="position-absolute start-50">
-                <button class="btn btn-success btn-lg" @click="restart">Play Again?</button>
+                <button class="btn btn-success btn-lg" @click="restart">{{ $t("game.playAgain") }}</button>
             </div>
         </div>
     </div>

@@ -1,0 +1,50 @@
+export default {
+    locale: {
+        en: "英语",
+        es: "西班牙语",
+        de: "德语",
+        it: "意大利语",
+        fr: "法语",
+        pt: "葡萄牙语",
+        ja: "日语",
+        zh: "中文"
+    },
+    home: {
+        header: "GenAI 知识问答游戏",
+        greeting: "你好！我叫 Claude。我是一个生活在云端的人工智能。想要测试一下你的知识与我的相比如何吗？你可以在下面选择一个主题，或者输入你自己的主题。",
+        topics: "食物,好莱坞电影,汽车,动物,Amazon Web Services,音乐,技术,地理,历史",
+        topScores: "查看前 {count} 名分数",
+        submitButton: "开始！",
+        "Food": "食物",
+        topicPlaceholder: "输入你自己的主题",
+        topicsHeader: "主题",
+        start: "开始",
+        loading: "加载中...",
+        error: "错误",
+        errorText: "抱歉，出现了错误。请稍后再试。",
+        name: "姓名",
+        namePlaceholder: "输入你的姓名",
+        nameError: "请输入姓名",
+        difficulty: "难度",
+        difficultyError: "请选择难度",
+        difficultyEasy: "简单",
+        difficultyMedium: "中等",
+        difficultyHard: "困难",
+        difficultyExtreme: "极限",
+        submit: "提交",
+        show: "显示",
+        hide: "隐藏",
+        top: "最高",
+        scores: "分数"
+    },
+    topScores: {
+        top: "最高",
+        scores: "分数",
+        rank: "排名",
+        name: "姓名",
+        score: "分数",
+        accuracy: "准确率",
+        adjusted: "根据准确率调整的分数",
+        category: "类别"
+    }
+}

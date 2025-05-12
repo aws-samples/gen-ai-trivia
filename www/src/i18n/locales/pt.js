@@ -1,0 +1,50 @@
+export default {
+    locale: {
+        en: "Inglês",
+        es: "Espanhol",
+        de: "Alemão",
+        it: "Italiano",
+        fr: "Francês",
+        pt: "Português",
+        ja: "Japonês",
+        zh: "Chinês"
+    },
+    home: {
+        header: "Jogo de Trivia GenAI",
+        greeting: "Olá! Meu nome é Claude. Sou uma inteligência artificial que vive na nuvem. Quer testar seus conhecimentos contra os meus? Você pode selecionar um tópico abaixo ou inserir o seu próprio..",
+        topics: "Comida,Filmes de Hollywood,Carros,Animais,Amazon Web Services,Música,Tecnologia,Geografia,História",
+        topScores: "Ver as {count} melhores pontuações",
+        submitButton: "Começar!",
+        "Food": "Comida",
+        topicPlaceholder: "Insira seu próprio tópico",
+        topicsHeader: "Tópicos",
+        start: "Começar",
+        loading: "Carregando...",
+        error: "Erro",
+        errorText: "Desculpe, ocorreu um erro. Por favor, tente novamente mais tarde.",
+        name: "Nome",
+        namePlaceholder: "Digite seu nome",
+        nameError: "Por favor, digite um nome",
+        difficulty: "Dificuldade",
+        difficultyError: "Por favor, selecione uma dificuldade",
+        difficultyEasy: "Fácil",
+        difficultyMedium: "Médio",
+        difficultyHard: "Difícil",
+        difficultyExtreme: "Extremo",
+        submit: "Enviar",
+        show: "Mostrar",
+        hide: "Ocultar",
+        top: "Melhores",
+        scores: "Pontuações"
+    },
+    topScores: {
+        top: "Melhores",
+        scores: "Pontuações",
+        rank: "Classificação",
+        name: "Nome",
+        score: "Pontuação",
+        accuracy: "Precisão",
+        adjusted: "Pontuação ajustada para precisão",
+        category: "Categoria"
+    }
+}

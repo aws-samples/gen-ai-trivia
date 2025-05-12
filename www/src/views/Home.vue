@@ -24,21 +24,20 @@ import LanguageSwitcher from '../components/LanguageSwitcher.vue';
         <div></div>
         <div></div>
         <div class="">
-            <h2 class="mb-3">Topics</h2>
+            <h2 class="mb-3">{{ $t("home.topicsHeader") }}</h2>
             <TopicButtons v-for="topic in topics" v-bind:topic="topic" />
             </br>
             <div ref="categoryContainer" class="mt-2">
                 <input type="text" ref="customCategory" :placeholder="$t('home.topicPlaceholder')" class="ms-2">
-                <button @click="submit" id="submit-button" class="btn btn-dark ms-2">{{ $t("home.submit") }}</button>
+                <button @click="submit" id="submit-button" class="btn btn-dark ms-2">{{ $t("home.submitButton")
+                    }}</button>
             </div>
         </div>
         <div class="">
             <br />
-            <button @click="showScoreTable = !showScoreTable" id="get_top_scores" class="btn btn-dark ms-2"><span
-                    v-if="showScoreTable">{{ $t("home.hide") }}</span><span v-else>{{ $t("home.show") }}</span> {{
-                        $t("home.top") }} {{ data.highscores.numberOfHighScores
-                }}
-                {{ $t("home.scores") }}</button>
+            <button @click="showScoreTable = !showScoreTable" id="get_top_scores" class="btn btn-dark ms-2">
+                {{ $t("home.topScores", { count: data.highscores.numberOfHighScores }) }}
+            </button>
             <div>
                 <TopScoresTable v-if="showScoreTable" :highScores="highScores"></TopScoresTable>
             </div>
@@ -56,8 +55,20 @@ export default {
         return {
             region: data.region,
             highScores: [],
-            showScoreTable: false,
-            topics: this.$t("home.topics").split(",")
+            showScoreTable: false
+        }
+    },
+    computed: {
+        topics() {
+            return this.$t("home.topics").split(',');
+        },
+        greeting() {
+            return this.$t("home.greeting");
+        }
+    },
+    watch: {
+        greeting(newGreeting) {
+            this.$refs.transitionMessage.innerHTML = newGreeting;
         }
     },
     mounted() {
@@ -72,7 +83,7 @@ export default {
                 await sleep(5);
             }
         };
-        updateMessage(this.$refs.transitionMessage, this.$t("home.greeting"));
+        updateMessage(this.$refs.transitionMessage, this.greeting);
         this.fetchTopScores();
     },
     methods: {

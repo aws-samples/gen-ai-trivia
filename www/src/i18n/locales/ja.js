@@ -1,0 +1,50 @@
+export default {
+    locale: {
+        en: "英語",
+        es: "スペイン語",
+        de: "ドイツ語",
+        it: "イタリア語",
+        fr: "フランス語",
+        pt: "ポルトガル語",
+        ja: "日本語",
+        zh: "中国語"
+    },
+    home: {
+        header: "GenAIトリビアゲーム",
+        greeting: "こんにちは！私の名前はClaudeです。クラウドに住んでいる人工知能です。私との知識を試してみませんか？以下のトピックを選択するか、独自のトピックを入力できます。",
+        topics: "食べ物,ハリウッド映画,車,動物,Amazon Web Services,音楽,テクノロジー,地理,歴史",
+        topScores: "上位{count}スコアを表示",
+        submitButton: "スタート！",
+        "Food": "食べ物",
+        topicPlaceholder: "独自のトピックを入力",
+        topicsHeader: "トピック",
+        start: "スタート",
+        loading: "読み込み中...",
+        error: "エラー",
+        errorText: "申し訳ありませんが、エラーが発生しました。後でもう一度お試しください。",
+        name: "名前",
+        namePlaceholder: "名前を入力してください",
+        nameError: "名前を入力してください",
+        difficulty: "難易度",
+        difficultyError: "難易度を選択してください",
+        difficultyEasy: "簡単",
+        difficultyMedium: "普通",
+        difficultyHard: "難しい",
+        difficultyExtreme: "極端",
+        submit: "送信",
+        show: "表示",
+        hide: "非表示",
+        top: "トップ",
+        scores: "スコア"
+    },
+    topScores: {
+        top: "トップ",
+        scores: "スコア",
+        rank: "ランク",
+        name: "名前",
+        score: "スコア",
+        accuracy: "正確さ",
+        adjusted: "正確さに対する調整スコア",
+        category: "カテゴリー"
+    }
+}

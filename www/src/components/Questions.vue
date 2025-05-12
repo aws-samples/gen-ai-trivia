@@ -1,7 +1,7 @@
 <template>
     <div>
         <div ref="loadingArea" class="text-center mt-5">
-            <h3>Loading the next question...</h3>
+            <h3>{{ $t("game.loading") }}</h3>
             <div class="spinner-border text-success" role="status">
                 <span class="sr-only"></span>
             </div>
@@ -9,7 +9,7 @@
         <div ref="content" class="mt-5">
             <div class="progress">
                 <div ref="progressBar" class="progress-bar bg-success" role="progressbar" style="width: 100%"
-                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ timer }} seconds</div>
+                    aria-valuenow="100" aria-valuemin="0" aria-valuemax="100">{{ timer }} {{ $t("game.timeRemaining") }}</div>
             </div>
             <div class="text-center mt-5">
                 <div class="card">

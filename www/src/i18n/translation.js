@@ -54,8 +54,13 @@ const Trans = {
         Trans.currentLocale = newLocale;
         document.querySelector("html").setAttribute("lang", newLocale);
 
-        document.cookie(`triviaLocale=${newLocale}`)
-        locaation.reload()
+        // Set cookie with path and expiration date to make it persist
+        const expirationDate = new Date();
+        expirationDate.setFullYear(expirationDate.getFullYear() + 1); // Cookie expires in 1 year
+        document.cookie = `triviaLocale=${newLocale}; path=/; expires=${expirationDate.toUTCString()}`;
+        
+        // No need to reload the page - Vue's reactivity will handle the UI updates
+        // The comment below is kept for reference
         // When the language is switched it's not rendering text with
         // computed values from mounted functions. Still need to figure
         // out the best way to do it. Trying to switch for local storage
